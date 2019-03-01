@@ -8,3 +8,9 @@ spring:
     console:
       enabled: true
       path: /h2-console
+security:
+  oauth2:
+    client:
+      scope: password
+      client-id: locadora
+      client-secret: locadora

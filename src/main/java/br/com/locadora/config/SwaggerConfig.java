@@ -31,7 +31,7 @@ public class SwaggerConfig {
                 .title("Locadora")
                 .description("Documentação de Api")
                 .version("1.0")
-                .contact(new Contact("Mauricio Maslowski Pedroso", "https://github.com/mauriciopedroso26/contas-a-pagar", "mauriciosantospedroso@gmail.com"))
+                .contact(new Contact("Mauricio Maslowski Pedroso", "https://github.com/mauriciopedroso26/locadora", "mauriciosantospedroso@gmail.com"))
                 .build();
     }
 }
