@@ -23,6 +23,15 @@ public class UserService implements UserDetailsService {
     }
 
     public User save(User user) {
+        user.setEmail(user.getEmail().toLowerCase());
+
+        UserDetails userDetails = userRepository.findByEmail(user.getEmail());
+        if (Objects.nonNull(userDetails)) {
+            throw new IllegalArgumentException(String.format("O Usuário %s já existe",
+                    userDetails.getUsername()));
+        }
+
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
