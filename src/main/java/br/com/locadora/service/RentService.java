@@ -62,6 +62,8 @@ public class RentService {
         validIfExistAvailablaQuantityAndUpdateQuantity(movie);
 
         rent.setCurrent(true);
+        rent.getMovieRent().setTitle(movie.get().getTitle());
+        rent.getMovieRent().setDirector(movie.get().getDirector());
         movieRentService.save(rent.getMovieRent());
     }
 

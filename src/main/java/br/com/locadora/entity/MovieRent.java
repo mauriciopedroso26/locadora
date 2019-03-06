@@ -18,6 +18,12 @@ public class MovieRent implements Serializable {
     @Column(name = "ID_MOVIE")
     private Long idMovie;
 
+    @Column(name = "TITLE", nullable = false)
+    private String title;
+
+    @Column(name = "DIRECTOR", nullable = false)
+    private String director;
+
     @Column(name = "ID_RENT")
     private Long idRent;
 
@@ -39,6 +45,22 @@ public class MovieRent implements Serializable {
 
     public void setIdMovie(Long idMovie) {
         this.idMovie = idMovie;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
     }
 
     public Long getIdRent() {
