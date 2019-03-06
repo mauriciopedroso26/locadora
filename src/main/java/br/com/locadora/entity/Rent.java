@@ -15,6 +15,9 @@ public class Rent implements Serializable {
     @Column(name = "ID_RENT", nullable = false)
     private Long idRent;
 
+    @Column(name = "EMAIL", nullable = false)
+    private String email;
+
     @OneToOne(mappedBy = "rent", fetch = FetchType.LAZY)
     private MovieRent movieRent;
 
@@ -27,6 +30,14 @@ public class Rent implements Serializable {
 
     public void setIdRent(Long idRent) {
         this.idRent = idRent;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public MovieRent getMovieRent() {

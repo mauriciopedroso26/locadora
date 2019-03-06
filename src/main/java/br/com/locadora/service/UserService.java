@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 public class UserService implements UserDetailsService {
 
@@ -27,6 +29,12 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) {
-        return userRepository.findByEmail(email);
+        UserDetails userDetails = userRepository.findByEmail(email);
+
+        if (Objects.nonNull(userDetails)) {
+            return userDetails;
+        } else {
+            throw new IllegalArgumentException(String.format("Usuário com o email %s não encontrado", email));
+        }
     }
 }

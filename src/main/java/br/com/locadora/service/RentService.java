@@ -15,16 +15,20 @@ public class RentService {
     private final RentRepository rentRepository;
     private final MovieService movieService;
     private final MovieRentService movieRentService;
+    private final UserService userService;
 
     @Autowired
-    public RentService(RentRepository rentRepository, MovieService movieService, MovieRentService movieRentService) {
+    public RentService(RentRepository rentRepository, MovieService movieService, MovieRentService movieRentService,
+                       UserService userService) {
         this.rentRepository = rentRepository;
         this.movieService = movieService;
         this.movieRentService = movieRentService;
+        this.userService = userService;
     }
 
     public Rent save(Rent rent) {
         saveMovieRent(rent);
+        userService.loadUserByUsername(rent.getEmail());
         Rent rentSaved = rentRepository.save(rent);
         updateMovieRentWithForeignkeyRent(rentSaved);
 
@@ -32,7 +36,7 @@ public class RentService {
     }
 
     public Rent update(Rent rent) {
-        List<Rent> rentList = rentRepository.findByCurrentTrue();
+        List<Rent> rentList = rentRepository.findByCurrentTrueAndEmail(rent.getEmail());
 
         Optional<Rent> rentOptional = rentList.stream().filter(rent1 -> rent1.getMovieRent().getIdMovie().equals(rent.getMovieRent().getIdMovie()))
                 .findFirst();
@@ -51,7 +55,8 @@ public class RentService {
         if (rentOptional.isPresent()) {
             return rentOptional.get();
         } else {
-            throw new IllegalArgumentException(String.format("Não existe locação para o filme com id %s",
+            throw new IllegalArgumentException(String.format("Não existe locação para o usuário %s, para o filme com id %s",
+                    rent.getEmail(),
                     rent.getMovieRent().getIdMovie()));
         }
     }

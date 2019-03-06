@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface RentRepository extends JpaRepository<Rent, Long> {
 
-    List<Rent> findByCurrentTrue();
+    List<Rent> findByCurrentTrueAndEmail(String email);
 }
