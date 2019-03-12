@@ -10,4 +10,4 @@ insert into TA_MOVIE (ID_MOVIE, TITLE, DIRECTOR, QUANTITY) values (9, 'Gladiador
 insert into TA_MOVIE (ID_MOVIE, TITLE, DIRECTOR, QUANTITY) values (10, 'O vingador do futuro 1990', 'Paul Verhoeven', 5);
 
 
-insert into TA_USER (ID_USER, EMAIL, NAME, PASSWORD) values (HIBERNATE_SEQUENCE.nextval, 'admin', 'admin', 'admin');
+insert into TA_USER (ID_USER, EMAIL, NAME, PASSWORD) values (HIBERNATE_SEQUENCE.nextval, 'admin', 'admin', '$2a$10$b2HH6gz/pW.urURQzBiOge0UOuIfxZ76a1XuYICdvBk5.tHEuK4zK');

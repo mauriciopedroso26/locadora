@@ -6,7 +6,6 @@ import br.com.locadora.repository.RentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -14,62 +13,57 @@ public class RentService {
 
     private final RentRepository rentRepository;
     private final MovieService movieService;
-    private final MovieRentService movieRentService;
     private final UserService userService;
 
     @Autowired
-    public RentService(RentRepository rentRepository, MovieService movieService, MovieRentService movieRentService,
-                       UserService userService) {
+    public RentService(RentRepository rentRepository, MovieService movieService, UserService userService) {
         this.rentRepository = rentRepository;
         this.movieService = movieService;
-        this.movieRentService = movieRentService;
         this.userService = userService;
     }
 
     public Rent save(Rent rent) {
-        saveMovieRent(rent);
+        saveMovie(rent);
         userService.loadUserByUsername(rent.getEmail());
-        Rent rentSaved = rentRepository.save(rent);
-        updateMovieRentWithForeignkeyRent(rentSaved);
-
-        return rentSaved;
+        Optional<Movie> movie = movieService.findById(rent.getIdMovie());
+        rent.setMovie(movie.get());
+        return rentRepository.save(rent);
     }
 
     public Rent update(Rent rent) {
-        List<Rent> rentList = rentRepository.findByCurrentTrueAndEmail(rent.getEmail());
-
-        Optional<Rent> rentOptional = rentList.stream().filter(rent1 -> rent1.getMovieRent().getIdMovie().equals(rent.getMovieRent().getIdMovie()))
-                .findFirst();
-
-        rentOptional.ifPresent(rent1 -> {
-            Optional<Movie> movie = movieService.findById(rent1.getMovieRent().getIdMovie());
-            movie.ifPresent(movie1 -> {
-                movie1.setQuantity(movie1.getQuantity() + 1);
-                movieService.save(movie1);
-            });
-            rent1.setCurrent(false);
-            rentRepository.save(rent1);
-
-        });
-
-        if (rentOptional.isPresent()) {
-            return rentOptional.get();
-        } else {
-            throw new IllegalArgumentException(String.format("Não existe locação para o usuário %s, para o filme com id %s",
-                    rent.getEmail(),
-                    rent.getMovieRent().getIdMovie()));
-        }
+//        List<Rent> rentList = rentRepository.findByCurrentTrueAndEmail(rent.getEmail());
+//
+//        Optional<Rent> rentOptional = rentList.stream().filter(rent1 -> rent1.getMovieRent().getIdMovie().equals(rent.getMovieRent().getIdMovie()))
+//                .findFirst();
+//
+//        rentOptional.ifPresent(rent1 -> {
+//            Optional<Movie> movie = movieService.findById(rent1.getMovieRent().getIdMovie());
+//            movie.ifPresent(movie1 -> {
+//                movie1.setQuantity(movie1.getQuantity() + 1);
+//                movieService.save(movie1);
+//            });
+//            rent1.setCurrent(false);
+//            rentRepository.save(rent1);
+//
+//        });
+//
+//        if (rentOptional.isPresent()) {
+//            return rentOptional.get();
+//        } else {
+//            throw new IllegalArgumentException(String.format("Não existe locação para o usuário %s, para o filme com id %s",
+//                    rent.getEmail(),
+//                    rent.getMovieRent().getIdMovie()));
+//        }
+        return null;
     }
 
-    private void saveMovieRent(Rent rent) {
-        Optional<Movie> movie = movieService.findById(rent.getMovieRent().getIdMovie());
+    private void saveMovie(Rent rent) {
+        Optional<Movie> movie = movieService.findById(rent.getIdMovie());
 
         validIfExistAvailablaQuantityAndUpdateQuantity(movie);
 
         rent.setCurrent(true);
-        rent.getMovieRent().setTitle(movie.get().getTitle());
-        rent.getMovieRent().setDirector(movie.get().getDirector());
-        movieRentService.save(rent.getMovieRent());
+        movieService.save(movie.get());
     }
 
     private void validIfExistAvailablaQuantityAndUpdateQuantity(Optional<Movie> movie) {
@@ -82,10 +76,4 @@ public class RentService {
             }
         });
     }
-
-    private void updateMovieRentWithForeignkeyRent(Rent rentSaved) {
-        rentSaved.getMovieRent().setIdRent(rentSaved.getIdRent());
-        movieRentService.save(rentSaved.getMovieRent());
-    }
-
 }

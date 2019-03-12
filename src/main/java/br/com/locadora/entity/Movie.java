@@ -2,6 +2,7 @@ package br.com.locadora.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -23,6 +24,9 @@ public class Movie implements Serializable {
 
     @Column(name = "QUANTITY", nullable = false)
     private Integer quantity;
+
+    @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY)
+    private List<Rent> rentList;
 
     public Long getIdMovie() {
         return idMovie;
@@ -54,6 +58,14 @@ public class Movie implements Serializable {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public List<Rent> getRentList() {
+        return rentList;
+    }
+
+    public void setRentList(List<Rent> rentList) {
+        this.rentList = rentList;
     }
 
     @Override

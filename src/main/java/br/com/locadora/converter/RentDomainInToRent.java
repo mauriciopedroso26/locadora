@@ -22,8 +22,7 @@ public class RentDomainInToRent implements Converter<RentDomainIn, Rent> {
         Rent rent = modelMapper.map(rentDomainIn, Rent.class);
 
         rent.setIdRent(null);
-        rent.getMovieRent().setIdMovieRent(null);
-        rent.getMovieRent().setIdRent(null);
+        rent.getMovie().setIdMovie(null);
 
         if (Objects.isNull(rent)) {
             throw new IllegalArgumentException("Objeto RenteDomainIn não pode ser convertido em Rent");

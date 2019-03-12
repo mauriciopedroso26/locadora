@@ -4,7 +4,8 @@ public class RentDomainOut {
 
     private Long idRent;
     private String email;
-    private MovieRentDomainOut movieRent;
+    private Long idMovie;
+    private MovieDomainOut movie;
     private boolean isCurrent;
 
     public Long getIdRent() {
@@ -23,12 +24,20 @@ public class RentDomainOut {
         this.email = email;
     }
 
-    public MovieRentDomainOut getMovieRent() {
-        return movieRent;
+    public Long getIdMovie() {
+        return idMovie;
     }
 
-    public void setMovieRent(MovieRentDomainOut movieRent) {
-        this.movieRent = movieRent;
+    public void setIdMovie(Long idMovie) {
+        this.idMovie = idMovie;
+    }
+
+    public MovieDomainOut getMovie() {
+        return movie;
+    }
+
+    public void setMovie(MovieDomainOut movie) {
+        this.movie = movie;
     }
 
     public boolean isCurrent() {
