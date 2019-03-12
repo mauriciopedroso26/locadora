@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -30,24 +31,18 @@ public class RentService {
     }
 
     public Rent update(Rent rent) {
-        List<Rent> rentList = rentRepository.findByCurrentTrueAndEmail(rent.getEmail());
+        Rent rentFound = rentRepository.findFirstByCurrentTrueAndEmailAndIdMovie(rent.getEmail(), rent.getIdMovie());
 
-        Optional<Rent> rentOptional = rentList.stream().filter(rent1 -> rent1.getIdMovie().equals(rent.getIdMovie()))
-                .findFirst();
-
-        rentOptional.ifPresent(rent1 -> {
-            Optional<Movie> movie = movieService.findById(rent1.getIdMovie());
+        if (Objects.nonNull(rentFound)) {
+            Optional<Movie> movie = movieService.findById(rentFound.getIdMovie());
             movie.ifPresent(movie1 -> {
                 movie1.setQuantity(movie1.getQuantity() + 1);
                 movieService.save(movie1);
             });
-            rent1.setCurrent(false);
-            rentRepository.save(rent1);
+            rentFound.setCurrent(false);
+            rentRepository.save(rentFound);
 
-        });
-
-        if (rentOptional.isPresent()) {
-            return rentOptional.get();
+            return rentFound;
         } else {
             throw new IllegalArgumentException(String.format("Não existe locação para o usuário %s, para o filme com id %s",
                     rent.getEmail(),
