@@ -25,8 +25,6 @@ public class RentService {
     public Rent save(Rent rent) {
         saveMovie(rent);
         userService.loadUserByUsername(rent.getEmail());
-        Optional<Movie> movie = movieService.findById(rent.getIdMovie());
-        rent.setMovie(movie.get());
         return rentRepository.save(rent);
     }
 
@@ -63,6 +61,7 @@ public class RentService {
         validIfExistAvailablaQuantityAndUpdateQuantity(movie);
 
         rent.setCurrent(true);
+        rent.setMovie(movie.get());
         movieService.save(movie.get());
     }
 
